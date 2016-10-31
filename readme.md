@@ -1,3 +1,5 @@
+
+```
 usage: domaincrawl.py [-h] [--dom [dom]] [--ext [ext]] [--out [out]]
                       [--line [line]] [--resume] [--session [session]]
                       [dic]
@@ -15,3 +17,4 @@ optional arguments:
   --line [line]        starting line of dictionnary
   --resume             resume from last session
   --session [session]  session file
+```
