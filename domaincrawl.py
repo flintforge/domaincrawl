@@ -31,8 +31,7 @@ This script is distributed under the terms of the GPL v2 license.
 """
 
 from subprocess import Popen, PIPE
-import argparse
-import re  # RegEx
+import re, argparse, socket
 from sys import stdout, exit
 
 GREEN = "\033[1;32m"
@@ -54,7 +53,6 @@ class ShellCommand:
             self.output, self.errors = p.communicate()
             if self.errors:
                 print self.errors
-                print 'something went wrong...'
                 exit(1)
             self.returncode = p.returncode
             return self.returncode
@@ -101,14 +99,15 @@ class DNSpy:
             res = ''
             print self.N, " asking for ", dom
             com.run(cmd)
-            # check what functions returns :
+            # check what it returns :
             # 2 : no net
             # 1 : not found
             # 0 : found
             print "returns: ", com.returncode
 
-            # if self.error == 2:
-            #    exit("problem")
+            #if self.error == 2:
+            #    raise Exception("disconnected")
+
             for line in com.output:
                 res += line
 
@@ -125,7 +124,7 @@ class DNSpy:
 
             li = self.dic.readline()
 
-            while not re.match('^[a-zA-Z0-9-]+$', li):
+            while li and not re.match('^[a-zA-Z0-9-]+$', li):
                 if re.match('^.*\*.*$', li):
                     print 'matched star'
                     exit
@@ -151,6 +150,8 @@ class DNSpy:
         self.dic.close()
 
 
+REMOTE_SERVER = 'lemonde.fr'
+
 def is_connected():
     try:
         host = socket.gethostbyname(REMOTE_SERVER)
@@ -164,9 +165,6 @@ def is_connected():
 
 
 if __name__ == '__main__':
-
-    if not is_connected():
-        exit
 
     print ("\033[1;32m")
     print ("     ╔═══╗")
